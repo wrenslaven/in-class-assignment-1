@@ -6,24 +6,17 @@ countryCapitals.Add("Burkina Faso", "Ouagadougou");
 countryCapitals.Add("Mozambique", "Maputo");
 countryCapitals.Add("Sudan", "Khartoum");
 
-List<string> countries = new List<string>()
-{
-    "Gabon",
-    "Burkina Faso",
-    "Mozambique"
-};
-
 int score = 0;
 int question_num = 1;
 
-Console.WriteLine("Welcome to the African capitals quiz! All answers are case-sensitive!");
+Console.WriteLine("Welcome to the African capitals quiz!");
 
 foreach (KeyValuePair<string, string> countryCapitalPair in countryCapitals)
 {
     Console.WriteLine($"Question {question_num}: What's the capital of {countryCapitalPair.Key}?");
 
-    string q1_input = Console.ReadLine();
-    if (q1_input == countryCapitalPair.Value) {
+    string input = Console.ReadLine();
+    if (string.Equals(input, countryCapitalPair.Value, StringComparison.CurrentCultureIgnoreCase)){
         Console.WriteLine("That's correct!");
         score++;
     }
