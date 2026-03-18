@@ -1,6 +1,8 @@
 using System.Text;
 using System.Globalization;
 
+Console.OutputEncoding = Encoding.UTF8;
+
 TriviaGame.PlayGame();
 
 public static class TriviaGame
@@ -29,56 +31,71 @@ public static class TriviaGame
     }
     public static string PlayGame()
     {
-        Dictionary<string, string> countryCapitals = new Dictionary<string, string>()
+        Dictionary<string, List<string>> countryCapitals = new Dictionary<string, List<string>>()
         {
-            ["Algeria"] = "Algiers",["Angola"] = "Luanda",
-            ["Benin"] = "Porto-Novo",["Botswana"] = "Gaborone",
-            ["Burkina Faso"] = "Ouagadougou",["Burundi"] = "Gitega",
-            ["Cabo Verde"] = "Praia",["Cameroon"] = "Yaoundé",
-            ["Central African Republic"] = "Bangui",["Chad"] = "N'Djamena",
-            ["Comoros"] = "Moroni",["Democratic Republic of the Congo"] = "Kinshasa",
-            ["Republic of the Congo"] = "Brazzaville",["Djibouti"] = "Djibouti City",
-            ["Egypt"] = "Cairo",["Equatorial Guinea"] = "Malabo",
-            ["Eritrea"] = "Asmara",["Eswatini"] = "Mbabane", // Lobamba should also be accepted
-            ["Ethiopia"] = "Adis Ababa",["Gabon"] = "Libreville",
-            ["Gambia"] = "Banjul",["Ghana"] = "Accra",
-            ["Guinea"] = "Conakry",["Guinea-Bissau"] = "Bissau",
-            ["Cote d'Ivoire"] = "Yamoussoukro",["Kenya"] = "Nairobi",
-            ["Lesotho"] = "Maseru",["Liberia"] = "Monrovia",
-            ["Libya"] = "Tripoli",["Madagascar"] = "Antananarivo",
-            ["Malawi"] = "Lilongwe",["Mali"] = "Bamako",
-            ["Mauritania"] = "Nouakchott",["Mauritius"] = "Port Louis",
-            ["Morocco"] = "Rabat",["Mozambique"] = "Maputo",
-            ["Namibia"] = "Windhoek",["Niger"] = "Niamey",
-            ["Nigeria"] = "Abuja",["Rwanda"] = "Kigali",
-            ["Sao Tome and Principe"] = "São Tomé",["Senegal"] = "Dakar",
-            ["Seychelles"] = "Victoria",["Sierra Leone"] = "Freetown",
-            ["Somalia"] = "Mogadishu",["South Africa"] = "Pretoria", // Cape Town should also be accepted
-            ["South Sudan"] = "Juba",["Sudan"] = "Khartoum",
-            ["Tanzania"] = "Dodoma",["Togo"] = "Lomé",
-            ["Tunisia"] = "Tunis",["Uganda"] = "Kampala",
-            ["Zambia"] = "Lusaka",["Zimbabwe"] = "Harare",
+            ["Algeria"] = new List<string>{"Algiers"},["Angola"] = new List<string>{"Luanda"},
+            ["Benin"] = new List<string>{"Porto-Novo"},["Botswana"] = new List<string>{"Gaborone"},
+            ["Burkina Faso"] = new List<string>{"Ouagadougou"},["Burundi"] = new List<string>{"Gitega"},
+            ["Cabo Verde"] = new List<string>{"Praia"},["Cameroon"] = new List<string>{"Yaoundé"},
+            ["Central African Republic"] = new List<string>{"Bangui"},["Chad"] = new List<string>{"N'Djamena"},
+            ["Comoros"] = new List<string>{"Moroni"},["Democratic Republic of the Congo"] = new List<string>{"Kinshasa"},
+            ["Republic of the Congo"] = new List<string>{"Brazzaville"},["Djibouti"] = new List<string>{"Djibouti City"},
+            ["Egypt"] = new List<string>{"Cairo"},["Equatorial Guinea"] = new List<string>{"Malabo"},
+            ["Eritrea"] = new List<string>{"Asmara"},["Eswatini"] = new List<string>{"Mbabane", "Lobamba"},
+            ["Ethiopia"] = new List<string>{"Adis Ababa"},["Gabon"] = new List<string>{"Libreville"},
+            ["Gambia"] = new List<string>{"Banjul"},["Ghana"] = new List<string>{"Accra"},
+            ["Guinea"] = new List<string>{"Conakry"},["Guinea-Bissau"] = new List<string>{"Bissau"},
+            ["Cote d'Ivoire"] = new List<string>{"Yamoussoukro"},["Kenya"] = new List<string>{"Nairobi"},
+            ["Lesotho"] = new List<string>{"Maseru"},["Liberia"] = new List<string>{"Monrovia"},
+            ["Libya"] = new List<string>{"Tripoli"},["Madagascar"] = new List<string>{"Antananarivo"},
+            ["Malawi"] = new List<string>{"Lilongwe"},["Mali"] = new List<string>{"Bamako"},
+            ["Mauritania"] = new List<string>{"Nouakchott"},["Mauritius"] = new List<string>{"Port Louis"},
+            ["Morocco"] = new List<string>{"Rabat"},["Mozambique"] = new List<string>{"Maputo"},
+            ["Namibia"] = new List<string>{"Windhoek"},["Niger"] = new List<string>{"Niamey"},
+            ["Nigeria"] = new List<string>{"Abuja"},["Rwanda"] = new List<string>{"Kigali"},
+            ["São Tomé and Principe"] = new List<string>{"São Tomé"},["Senegal"] = new List<string>{"Dakar"},
+            ["Seychelles"] = new List<string>{"Victoria"},["Sierra Leone"] = new List<string>{"Freetown"},
+            ["Somalia"] = new List<string>{"Mogadishu"},["South Africa"] = new List<string>{"Pretoria", "Cape Town", "Bloemfontein"},
+            ["South Sudan"] = new List<string>{"Juba"},["Sudan"] = new List<string>{"Khartoum"},
+            ["Tanzania"] = new List<string>{"Dodoma"},["Togo"] = new List<string>{"Lomé"}, 
+            ["Tunisia"] = new List<string>{"Tunis"},["Uganda"] = new List<string>{"Kampala"},
+            ["Zambia"] = new List<string>{"Lusaka"},["Zimbabwe"] = new List<string>{"Harare"},
         };
         
         int score = 0;
         int question_num = 1;
         Console.WriteLine("Welcome to the African capitals quiz!");
 
-        foreach (KeyValuePair<string, string> countryCapitalPair in countryCapitals)
+        foreach (KeyValuePair<string, List<string>> countryCapitalPair in countryCapitals)
         {
             Console.WriteLine($"Question {question_num++}: What's the capital of {countryCapitalPair.Key}?");
 
             string input = Console.ReadLine();
-            string cleaned_input = RemoveDiacritics(input);
-            string cleaned_answer = RemoveDiacritics(countryCapitalPair.Value);
-
-            if (string.Equals(cleaned_input, cleaned_answer, StringComparison.CurrentCultureIgnoreCase)){
-                Console.WriteLine("That's correct!");
-                score++;
-            }
-            else
+            string cleaned_input = RemoveDiacritics(input).Replace('\u002D', ' ');
+            foreach (string capital in countryCapitalPair.Value)
             {
-                Console.WriteLine($"That's incorrect. The capital of {countryCapitalPair.Key} is {countryCapitalPair.Value}.");
+                string cleaned_answer = RemoveDiacritics(capital).Replace('\u002D', ' ');
+
+                if (string.Equals(cleaned_input, cleaned_answer, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Console.WriteLine("That's correct!");
+                        score++;
+                        continue;
+                    }
+                else
+                {
+                    if (countryCapitalPair.Value.Count == 1)
+                    {
+                        Console.WriteLine($"That's incorrect. The capital of {countryCapitalPair.Key} is {capital}.");
+                    }
+                    else
+                    {
+                        string allCapitals = string.Join(", ", countryCapitalPair.Value);
+                        Console.WriteLine($"That's incorrect. The capitals of {countryCapitalPair.Key} are: {allCapitals}.");
+                        break;
+                    }
+                    ;
+                }
             }
         }
 
